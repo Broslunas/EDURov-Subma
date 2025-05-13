@@ -50,10 +50,6 @@ Este proyecto de Arduino permite controlar tres motores de manera independiente 
 
 - La pantalla LCD indica el estado actual del sistema (movimiento o inactividad).
 
-## 📸 Imagen de ejemplo (opcional)
-
-*Puedes añadir aquí una foto del proyecto armado para una mejor referencia visual.*
-
 ## 🚀 Requisitos
 
 - Arduino IDE
