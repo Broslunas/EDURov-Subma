@@ -68,7 +68,8 @@ void loop() {
   int x2 = analogRead(pinX2);
   int y2 = analogRead(pinY2);
 
-  if (x1 > 520) {
+  if (x1 > 520)  
+  {
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print("Atrás");
@@ -82,8 +83,9 @@ void loop() {
     digitalWrite(IN3, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     digitalWrite(IN4, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     analogWrite(ENB, 200);
-
-  } else if (x1 < 500) {
+  }
+  if (x1 < 500)
+  {
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print("Alante");
@@ -99,7 +101,8 @@ void loop() {
     analogWrite(ENB, 200);
   }
 
-  if (y1 > 520) {
+  if (y1 > 520)
+  {
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print( "Izquierda");
@@ -113,8 +116,9 @@ void loop() {
     digitalWrite(IN3, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     digitalWrite(IN4, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     analogWrite(ENB, 200);
-
-  } else if (y1 < 500) {
+  }
+  if (y1 < 500)
+  {
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print("Derecha");
@@ -130,7 +134,8 @@ void loop() {
     analogWrite(ENB, 200);
   }
 
-  if (y1 > 500 && y1 < 520 && x1 > 500 && x1 < 520) { // ESTABLECE LA ZONA MUERTA DEL JOYSTICK
+  if (y1 > 500 && y1 < 520 && x1 > 500 && x1 < 520)
+  { // ESTABLECE LA ZONA MUERTA DEL JOYSTICK
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print("Toy quieto");
@@ -147,7 +152,8 @@ void loop() {
   }
 
   // DESPLAZAMIENTO EJE Y
-  if (x2 > 520) {
+  if (x2 > 520) 
+  {
     lcd.clear();
     lcd.setCursor(0,1);
     lcd.print("Arriba");
@@ -156,8 +162,9 @@ void loop() {
     digitalWrite(IN5, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     digitalWrite(IN6, LOW);  // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     analogWrite(ENA2, 200);
-
-  } else if (x2 < 500) {
+  }
+  if (x2 < 500)
+  {
     lcd.clear();
     lcd.setCursor(0,1);
     lcd.print("Abajo");
