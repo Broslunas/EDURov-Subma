@@ -60,6 +60,7 @@ void setup(){
 }
 
 void loop() {
+  int speed;
   // JOYSTICK DESPLAZAMIENTO EJE "XZ"
   int x1 = analogRead(pinX1);         // Lee el valor del eje X (0 a 1023)
   int y1 = analogRead(pinY1);         // Lee el valor del eje Y (0 a 1023)
@@ -77,12 +78,13 @@ void loop() {
     // MOTOR A
     digitalWrite(IN1, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     digitalWrite(IN2, LOW);  // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    analogWrite(ENA1, 200);
+    speed = map(x1, 521, 1023, 0, 255);
+    analogWrite(ENA1, speed);
 
     // MOTOR B
     digitalWrite(IN3, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     digitalWrite(IN4, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    analogWrite(ENB, 200);
+    analogWrite(ENB, speed);
   }
   if (x1 < 500)
   {
@@ -93,12 +95,13 @@ void loop() {
     // MOTOR A
     digitalWrite(IN1, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     digitalWrite(IN2, HIGH);// MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    analogWrite(ENA1, 200);
+    speed = map(x1, 499, 0, 0, 255);
+    analogWrite(ENA1, speed);
 
     // MOTOR B
     digitalWrite(IN3, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     digitalWrite(IN4, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    analogWrite(ENB, 200);
+    analogWrite(ENB, speed);
   }
 
   if (y1 > 520)
@@ -110,12 +113,13 @@ void loop() {
     // MOTOR A
     digitalWrite(IN1, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     digitalWrite(IN2, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    analogWrite(ENA1, 200);
+    speed = map(y1, 521, 1023, 0, 255);
+    analogWrite(ENA1, speed);
 
     // MOTOR B
     digitalWrite(IN3, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     digitalWrite(IN4, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    analogWrite(ENB, 200);
+    analogWrite(ENB, speed);
   }
   if (y1 < 500)
   {
@@ -126,12 +130,13 @@ void loop() {
     // MOTOR A
     digitalWrite(IN1, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     digitalWrite(IN2, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    analogWrite(ENA1, 200);
+    speed = map(y1, 499, 0, 0, 255);
+    analogWrite(ENA1, speed);
 
     // MOTOR B
     digitalWrite(IN3, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     digitalWrite(IN4, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    analogWrite(ENB, 200);
+    analogWrite(ENB, speed);
   }
 
   if (y1 > 500 && y1 < 520 && x1 > 500 && x1 < 520)
@@ -143,12 +148,13 @@ void loop() {
     // MOTOR A
     digitalWrite(IN1, LOW);
     digitalWrite(IN2, LOW);
-    analogWrite(ENA1, 0);
+    speed = 0;
+    analogWrite(ENA1, speed);
 
     // MOTOR B
     digitalWrite(IN3, LOW);
     digitalWrite(IN4, LOW);
-    analogWrite(ENB, 0);
+    analogWrite(ENB, speed);
   }
 
   // DESPLAZAMIENTO EJE Y
@@ -161,7 +167,8 @@ void loop() {
     // MOTOR A
     digitalWrite(IN5, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     digitalWrite(IN6, LOW);  // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    analogWrite(ENA2, 200);
+    speed = map(x2, 521, 1023, 0, 255);
+    analogWrite(ENA2, speed);
   }
   if (x2 < 500)
   {
@@ -172,7 +179,8 @@ void loop() {
     // MOTOR A
     digitalWrite(IN5, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     digitalWrite(IN6, HIGH);// MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    analogWrite(ENA2, 200);
+    speed = map(x2, 499, 0, 0, 255);
+    analogWrite(ENA2, speed);
   }
 
   if (x2 > 500 && x2 < 520) { // ESTABLECE LA ZONA MUERTA DEL JOYSTICK
@@ -183,6 +191,7 @@ void loop() {
     // MOTOR A
     digitalWrite(IN5, LOW);
     digitalWrite(IN6, LOW);
-    analogWrite(ENA2, 0);
+    speed = 0;
+    analogWrite(ENA2, speed);
   }
 }
