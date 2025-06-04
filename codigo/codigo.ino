@@ -9,6 +9,7 @@ const int pinY1 = A1;
 const int pinX2 = A2;
 const int pinY2 = A3;
 
+
 // CONTROLADORA 1 > MOTOR A
 const int IN1 = 8;
 const int IN2 = 9;
@@ -19,91 +20,169 @@ const int IN3 = 5;
 const int IN4 = 6;
 const int ENB = 7;
 
+
 // CONTROLADORA 2 > MOTOR A
 const int IN5 = 11;
 const int IN6 = 12;
 const int ENA2 = 13;
 
-// LCD
+
+// AÑADIR TAMBIEN LOS PINES DE LA LCD
+// A LA PLACA ARDUINO
+// SCL: A5
+// SDA: A4
 LiquidCrystal_I2C lcd(0x27,16,2);
 
 void setup(){
+  //LCD
   lcd.init();
   lcd.backlight();
   lcd.setCursor(0,0);
   lcd.print("Esperando Indicaciones");
+
+  // JOYSTICK 1
   Serial.begin(9600);
 
-  // Motores
+  // PINES CONTROLADORA 1 > MOTOR A
   pinMode(IN1, OUTPUT);
   pinMode(IN2, OUTPUT);
   pinMode(ENA1, OUTPUT);
 
+  // PINES CONTROLADORA 1 > MOTOR B
   pinMode(IN3, OUTPUT);
   pinMode(IN4, OUTPUT);
   pinMode(ENB, OUTPUT);
 
+  // PINES CONTROLADORA 2 > MOTOR A
   pinMode(IN5, OUTPUT);
   pinMode(IN6, OUTPUT);
   pinMode(ENA2, OUTPUT);
 }
 
 void loop() {
-  int x1 = analogRead(pinX1);
-  int y1 = analogRead(pinY1);
+  // JOYSTICK DESPLAZAMIENTO EJE "XZ"
+  int x1 = analogRead(pinX1);         // Lee el valor del eje X (0 a 1023)
+  int y1 = analogRead(pinY1);         // Lee el valor del eje Y (0 a 1023)
+
+  // JOYSTICK DESPLAZAMIENTO EJE "Y"
   int x2 = analogRead(pinX2);
+  int y2 = analogRead(pinY2);
 
-  int deadZone = 30; // zona muerta +/- alrededor de 512
+  if (x1 > 520)  
+  {
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Atrás");
 
-  // --- Movimiento Adelante / Atrás (JOYSTICK 1) ---
-  if (abs(x1 - 512) > deadZone) {
-    int velocidad = map(abs(x1 - 512), 0, 512, 0, 255);
+    // MOTOR A
+    digitalWrite(IN1, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN2, LOW);  // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    analogWrite(ENA1, 200);
+
+    // MOTOR B
+    digitalWrite(IN3, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN4, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    analogWrite(ENB, 200);
+  }
+  if (x1 < 500)
+  {
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Alante");
     
-    if (x1 < 512) { // Adelante
-      lcd.clear(); lcd.setCursor(0,0); lcd.print("Alante");
-      digitalWrite(IN1, LOW); digitalWrite(IN2, HIGH); analogWrite(ENA1, velocidad);
-      digitalWrite(IN3, LOW); digitalWrite(IN4, HIGH); analogWrite(ENB, velocidad);
-    } else { // Atrás
-      lcd.clear(); lcd.setCursor(0,0); lcd.print("Atras");
-      digitalWrite(IN1, HIGH); digitalWrite(IN2, LOW); analogWrite(ENA1, velocidad);
-      digitalWrite(IN3, HIGH); digitalWrite(IN4, LOW); analogWrite(ENB, velocidad);
-    }
-  } 
-  // --- Giro Izquierda / Derecha (JOYSTICK 1) ---
-  else if (abs(y1 - 512) > deadZone) {
-    int velocidad = map(abs(y1 - 512), 0, 512, 0, 255);
+    // MOTOR A
+    digitalWrite(IN1, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN2, HIGH);// MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    analogWrite(ENA1, 200);
 
-    if (y1 > 512) { // Izquierda
-      lcd.clear(); lcd.setCursor(0,0); lcd.print("Izquierda");
-      digitalWrite(IN1, HIGH); digitalWrite(IN2, LOW); analogWrite(ENA1, velocidad);
-      digitalWrite(IN3, LOW); digitalWrite(IN4, HIGH); analogWrite(ENB, velocidad);
-    } else { // Derecha
-      lcd.clear(); lcd.setCursor(0,0); lcd.print("Derecha");
-      digitalWrite(IN1, LOW); digitalWrite(IN2, HIGH); analogWrite(ENA1, velocidad);
-      digitalWrite(IN3, HIGH); digitalWrite(IN4, LOW); analogWrite(ENB, velocidad);
-    }
-  } 
-  else {
-    lcd.clear(); lcd.setCursor(0,0); lcd.print("Toy quieto");
-    digitalWrite(IN1, LOW); digitalWrite(IN2, LOW); analogWrite(ENA1, 0);
-    digitalWrite(IN3, LOW); digitalWrite(IN4, LOW); analogWrite(ENB, 0);
+    // MOTOR B
+    digitalWrite(IN3, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN4, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    analogWrite(ENB, 200);
   }
 
-  // --- Movimiento vertical (JOYSTICK 2) ---
-  if (abs(x2 - 512) > deadZone) {
-    int velocidad = map(abs(x2 - 512), 0, 512, 0, 255);
+  if (y1 > 520)
+  {
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print( "Izquierda");
+
+    // MOTOR A
+    digitalWrite(IN1, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN2, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    analogWrite(ENA1, 200);
+
+    // MOTOR B
+    digitalWrite(IN3, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN4, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    analogWrite(ENB, 200);
+  }
+  if (y1 < 500)
+  {
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Derecha");
     
-    if (x2 > 512) { // Arriba
-      lcd.setCursor(0,1); lcd.print("Arriba");
-      digitalWrite(IN5, HIGH); digitalWrite(IN6, LOW); analogWrite(ENA2, velocidad);
-    } else { // Abajo
-      lcd.setCursor(0,1); lcd.print("Abajo");
-      digitalWrite(IN5, LOW); digitalWrite(IN6, HIGH); analogWrite(ENA2, velocidad);
-    }
-  } else {
-    lcd.setCursor(0,1); lcd.print("Quieto");
-    digitalWrite(IN5, LOW); digitalWrite(IN6, LOW); analogWrite(ENA2, 0);
+    // MOTOR A
+    digitalWrite(IN1, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN2, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    analogWrite(ENA1, 200);
+
+    // MOTOR B
+    digitalWrite(IN3, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN4, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    analogWrite(ENB, 200);
   }
 
-  delay(100); // Para evitar parpadeo excesivo
+  if (y1 > 500 && y1 < 520 && x1 > 500 && x1 < 520)
+  { // ESTABLECE LA ZONA MUERTA DEL JOYSTICK
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Toy quieto");
+
+    // MOTOR A
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, LOW);
+    analogWrite(ENA1, 0);
+
+    // MOTOR B
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, LOW);
+    analogWrite(ENB, 0);
+  }
+
+  // DESPLAZAMIENTO EJE Y
+  if (x2 > 520) 
+  {
+    lcd.clear();
+    lcd.setCursor(0,1);
+    lcd.print("Arriba");
+
+    // MOTOR A
+    digitalWrite(IN5, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN6, LOW);  // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    analogWrite(ENA2, 200);
+  }
+  if (x2 < 500)
+  {
+    lcd.clear();
+    lcd.setCursor(0,1);
+    lcd.print("Abajo");
+    
+    // MOTOR A
+    digitalWrite(IN5, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN6, HIGH);// MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    analogWrite(ENA2, 200);
+  }
+
+  if (x2 > 500 && x2 < 520) { // ESTABLECE LA ZONA MUERTA DEL JOYSTICK
+    lcd.clear();
+    lcd.setCursor(0,1);
+    lcd.print("Toy quieto");
+
+    // MOTOR A
+    digitalWrite(IN5, LOW);
+    digitalWrite(IN6, LOW);
+    analogWrite(ENA2, 0);
+  }
 }
