@@ -7,7 +7,6 @@ const int pinY1 = A1;
 
 // JOYSTICK 2
 const int pinX2 = A2;
-const int pinY2 = A3;
 
 
 // CONTROLADORA 1 > MOTOR A
@@ -42,6 +41,8 @@ void setup(){
   lcd.backlight();
   lcd.setCursor(0,0);
   lcd.print("Esperando Indicaciones");
+  lcd.setCursor(0,1);
+  lcd.print("卐 Viva Hitler 卐");
 
   // JOYSTICK 1
   Serial.begin(9600);
@@ -69,7 +70,6 @@ void loop() {
 
   // JOYSTICK DESPLAZAMIENTO EJE "Y"
   int x2 = analogRead(pinX2);
-  int y2 = analogRead(pinY2);
 
 
   lcd.clear();
@@ -160,7 +160,7 @@ void loop() {
   else if (x2 < JOYSTICK_CENTRO - RADIO_DEADZONE)
   {
     lcd.print("Abajo");
-    
+
     // MOTOR A
     digitalWrite(IN5, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     digitalWrite(IN6, HIGH);// MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
