@@ -31,7 +31,10 @@ const int ENA2 = 13;
 // A LA PLACA ARDUINO
 // SCL: A5
 // SDA: A4
-LiquidCrystal_I2C lcd(0x27,16,2);
+LiquidCrystal_I2C lcd(0x27,16,2); 
+
+const int JOYSTICK_CENTRO = 512;
+const int RADIO_DEADZONE = 15;
 
 void setup(){
   //LCD
@@ -68,11 +71,13 @@ void loop() {
   int x2 = analogRead(pinX2);
   int y2 = analogRead(pinY2);
 
-  if (x1 > 520)  
+
+  lcd.clear();
+  lcd.setCursor(0,0);
+
+  if (x1 > JOYSTICK_CENTRO + RADIO_DEADZONE)  
   {
-    lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print("Atrás");
+    lcd.print("Atras");
 
     // MOTOR A
     digitalWrite(IN1, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
@@ -84,10 +89,8 @@ void loop() {
     digitalWrite(IN4, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     analogWrite(ENB, 200);
   }
-  if (x1 < 500)
+  else if (x1 < JOYSTICK_CENTRO - RADIO_DEADZONE)
   {
-    lcd.clear();
-    lcd.setCursor(0,0);
     lcd.print("Alante");
     
     // MOTOR A
@@ -100,12 +103,9 @@ void loop() {
     digitalWrite(IN4, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     analogWrite(ENB, 200);
   }
-
-  if (y1 > 520)
+  else if (y1 > JOYSTICK_CENTRO + RADIO_DEADZONE)
   {
-    lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print( "Izquierda");
+    lcd.print("Izquierda");
 
     // MOTOR A
     digitalWrite(IN1, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
@@ -117,10 +117,8 @@ void loop() {
     digitalWrite(IN4, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     analogWrite(ENB, 200);
   }
-  if (y1 < 500)
+  else if (y1 < JOYSTICK_CENTRO - RADIO_DEADZONE)
   {
-    lcd.clear();
-    lcd.setCursor(0,0);
     lcd.print("Derecha");
     
     // MOTOR A
@@ -133,11 +131,8 @@ void loop() {
     digitalWrite(IN4, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     analogWrite(ENB, 200);
   }
-
-  if (y1 > 500 && y1 < 520 && x1 > 500 && x1 < 520)
+  else
   { // ESTABLECE LA ZONA MUERTA DEL JOYSTICK
-    lcd.clear();
-    lcd.setCursor(0,0);
     lcd.print("Toy quieto");
 
     // MOTOR A
@@ -152,10 +147,9 @@ void loop() {
   }
 
   // DESPLAZAMIENTO EJE Y
-  if (x2 > 520) 
+  lcd.setCursor(0,1);
+  if (x2 > JOYSTICK_CENTRO + RADIO_DEADZONE) 
   {
-    lcd.clear();
-    lcd.setCursor(0,1);
     lcd.print("Arriba");
 
     // MOTOR A
@@ -163,10 +157,8 @@ void loop() {
     digitalWrite(IN6, LOW);  // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     analogWrite(ENA2, 200);
   }
-  if (x2 < 500)
+  else if (x2 < JOYSTICK_CENTRO - RADIO_DEADZONE)
   {
-    lcd.clear();
-    lcd.setCursor(0,1);
     lcd.print("Abajo");
     
     // MOTOR A
@@ -174,10 +166,8 @@ void loop() {
     digitalWrite(IN6, HIGH);// MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     analogWrite(ENA2, 200);
   }
-
-  if (x2 > 500 && x2 < 520) { // ESTABLECE LA ZONA MUERTA DEL JOYSTICK
-    lcd.clear();
-    lcd.setCursor(0,1);
+  else
+  { // ESTABLECE LA ZONA MUERTA DEL JOYSTICK
     lcd.print("Toy quieto");
 
     // MOTOR A
