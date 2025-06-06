@@ -16,7 +16,7 @@ print("✅ Mando conectado:", joystick.get_name())
 def enviar_comando(c, x, y):
     arduino.write(c.encode())
     if c != 'x':
-        print(f"📤 Enviado: '{c}' | Stick Izq: X={x:.2f} Y={y:.2f}")
+        print(f"📤 Enviado: '{c}' | Coords: X={x:.2f} Y={y:.2f}")
 
 while True:
     pygame.event.pump()
