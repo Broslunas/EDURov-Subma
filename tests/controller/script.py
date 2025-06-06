@@ -27,9 +27,9 @@ while True:
     deadzone = 0.2
     comando = 'x'  # quieto por defecto
 
-    # Leer botones círculo y cuadrado
+    # Leer botones círculo y equis
     boton_circulo = joystick.get_button(1)  # botón círculo suele ser el 1
-    boton_cuadrado = joystick.get_button(0)  # botón cuadrado suele ser el 0
+    boton_cuadrado = joystick.get_button(0)  # botón equis suele ser el 0
 
     if eje_y < -deadzone:
         comando = 'w'  # alante
