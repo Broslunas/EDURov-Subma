@@ -140,6 +140,6 @@ Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más 
 ## ⭐ Créditos
 
 Desarrollado como proyecto educativo del IES Las Veredillas.
-- @Broslunas | Pablo
+- ![@Broslunas](https://github.com/Broslunas) | Pablo
 - @elamogussus | Zi Cheng
 ---
