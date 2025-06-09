@@ -1,74 +1,144 @@
-# Control de Motores con Joystick y LCD en Arduino
+# 🤖 Control de Submarino Arduino
 
-Este proyecto de Arduino permite controlar tres motores de manera independiente utilizando dos joysticks analógicos. Además, una pantalla LCD I2C proporciona retroalimentación visual del movimiento en tiempo real.
+Este proyecto implementa un sistema de control para un submarino robótico utilizando Arduino. Ofrece múltiples opciones de control: joysticks analógicos, mando PS4/PS5 por USB, y control por script Python.
 
-## 🧠 Descripción
+## 📝 Descripción General
 
-- **Joystick 1** controla el desplazamiento en los ejes X y Z, moviendo dos motores (Motor A y Motor B) hacia adelante, atrás, izquierda o derecha.
-- **Joystick 2** controla el eje Y con un motor adicional (Motor C), simulando un movimiento vertical (arriba/abajo).
-- Una **pantalla LCD I2C 16x2** muestra el estado actual del movimiento de los motores.
+El sistema controla tres motores para el movimiento del submarino:
 
-## 🛠️ Componentes Utilizados
+- **Motores A y B**: Controlan el movimiento horizontal (adelante/atrás/izquierda/derecha)
+- **Motor C**: Controla el movimiento vertical (subir/bajar)
 
-- Arduino UNO (o compatible)
-- 2 Joysticks analógicos
+### 🎮 Opciones de Control
+
+1. **Control por Joysticks** (`/codigo/joysticks/`)
+
+   - Dos joysticks analógicos
+   - Joystick 1: Control de movimiento horizontal
+   - Joystick 2: Control de movimiento vertical
+
+2. **Control por Mando PS4/PS5** (`/codigo/ps-controller/`)
+
+   - Conexión por USB Host Shield
+   - Script Python para comunicación serial
+   - Stick izquierdo: Movimiento horizontal
+   - Stick derecho: Movimiento vertical
+   - Hace falta uso del script `script.py` para enviar comandos desde el mando
+
+## 🛠️ Componentes Necesarios
+
+### Hardware Básico
+
+- Arduino UNO o compatible
 - 3 Motores DC
-- 2 Controladoras L298N o L9110 (según configuración)
-- Pantalla LCD I2C 16x2 (dirección: `0x27`)
-- Jumpers y protoboard
+- 2 Controladoras L298N/L9110
+- Pantalla LCD I2C 16x2
+- Protoboard y jumpers
 
-## ⚙️ Conexiones
+### Hardware Adicional (según método de control)
 
-### Joysticks
-- Joystick 1: `X → A0`, `Y → A1`
-- Joystick 2: `X → A2`, `Y → A3`
+- **Opción Joysticks**: 2 Joysticks analógicos
+- **Opción PS4/PS5**: USB Host Shield + Cable USB
 
-### Motores (con controladoras)
-- Controladora 1 (Motor A y B):
-  - IN1 → D8, IN2 → D9, ENA → D10 (Motor A)
-  - IN3 → D5, IN4 → D6, ENB → D7 (Motor B)
-- Controladora 2 (Motor C):
-  - IN5 → D11, IN6 → D12, ENA2 → D13
+## ⚡ Conexiones
 
-### Pantalla LCD
-- SDA → A4  
-- SCL → A5  
+### Motores
 
-## 🧾 Funcionamiento
+- **Controladora 1** (Motores A y B):
+  - Motor A: IN1→D8, IN2→D9, ENA→D10
+  - Motor B: IN3→D5, IN4→D6, ENB→D7
+- **Controladora 2** (Motor C):
+  - IN5→D11, IN6→D12, ENA2→D13
 
-- Cuando el usuario mueve el joystick 1:
-  - **X+** → Atrás
-  - **X-** → Adelante
-  - **Y+** → Izquierda
-  - **Y-** → Derecha
-  - Zona muerta para evitar ruido entre valores 500–520
+### Pantalla LCD I2C
 
-- Cuando el usuario mueve el joystick 2:
-  - **X+** → Subir (Arriba)
-  - **X-** → Bajar (Abajo)
-  - Zona muerta entre 500–520
+- SDA → A4
+- SCL → A5
 
-- La pantalla LCD indica el estado actual del sistema (movimiento o inactividad).
+### Joysticks (si se usa esta opción)
 
-## 🚀 Requisitos
+- **Joystick 1**: X→A0, Y→A1
+- **Joystick 2**: X→A2
+
+## 💻 Software Necesario
+
+### Arduino
 
 - Arduino IDE
-- Librería `LiquidCrystal_I2C` instalada (`Sketch > Include Library > Manage Libraries...`)
+- Bibliotecas:
+  - `LiquidCrystal_I2C`
+  - `USB Host Shield Library 2.0` (para control PS4/PS5)
 
-## 📦 Instalación
+### Python (para control por script)
 
-1. Clona este repositorio o copia el código en el IDE de Arduino.
-2. Conecta los componentes según el esquema.
-3. Sube el código a tu placa Arduino.
-4. ¡Listo! El sistema está listo para recibir tus comandos desde los joysticks.
+- Python 3.x
+- Bibliotecas:
+  - `pyserial`
+  - `pygame` (para control con mando)
 
-## 📝 Notas
+## 📂 Estructura del Proyecto
 
-- Asegúrate de calibrar los valores de zona muerta si los joysticks son muy sensibles.
-- Puedes modificar la dirección del LCD (`0x27`) si usas otro modelo.
+```
+├── codigo/
+│   ├── joysticks/          # Control por joysticks
+│   │   └── joysticks.ino
+│   └── ps-controller/      # Control por mando PS4/PS5
+│       ├── ps-controller.ino
+│       └── script.py
+├── tests/                  # Pruebas individuales
+│   ├── controller/         # Control manual
+│   │   ├── controller.ino
+│   │   └── script.py
+│   ├── joysticks/         # Test de joysticks
+│   ├── lcd/              # Test de LCD
+│   ├── motor/            # Test de motores
+│   └── usb-hostshield/   # Test de USB Shield
+```
+
+## 🚀 Instalación y Uso
+
+1. **Preparación del Hardware**
+
+   - Realizar todas las conexiones según el diagrama elegido
+   - Para PS4/PS5: Conectar el USB Host Shield a Arduino
+
+2. **Instalación del Software**
+
+   - Instalar Arduino IDE
+   - Instalar las bibliotecas necesarias
+   - Para control por script: Instalar Python y dependencias
+
+3. **Configuración**
+
+   - Elegir el método de control deseado
+   - Cargar el sketch correspondiente en Arduino
+   - Para PS4/PS5 o script: Ejecutar el script Python
+
+4. **Calibración**
+   - Ajustar la zona muerta de los controles si es necesario
+   - Verificar la dirección I2C del LCD (por defecto 0x27)
+   - Comprobar la orientación de los motores
+
+## 🛟 Resolución de Problemas
+
+- **LCD no funciona**: Verificar dirección I2C y conexiones
+- **Motores no responden**: Comprobar polaridad y conexiones
+- **Mando PS4/PS5 no detectado**: Verificar USB Host Shield
+- **Error de comunicación serial**: Comprobar puerto COM y velocidad
+
+## 📝 Notas de Desarrollo
+
+- Zona muerta implementada para evitar ruido en los controles
+- Velocidad de motores configurable (0-255)
+- Sistema modular para fácil adaptación
+- Retroalimentación visual mediante LCD
 
 ## 📄 Licencia
 
-Este proyecto se distribuye bajo la licencia MIT. Puedes usarlo, modificarlo y compartirlo libremente.
+Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
+
+## ⭐ Créditos
+
+Desarrollado como proyecto educativo del IES Las Veredillas.
 
 ---
