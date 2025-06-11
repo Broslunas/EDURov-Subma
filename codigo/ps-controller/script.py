@@ -2,7 +2,7 @@ import pygame
 import serial
 import time
 
-arduino = serial.Serial('COM3', 9600)
+# arduino = serial.Serial('COM4', 9600)
 time.sleep(2)
 
 pygame.init()
@@ -13,16 +13,13 @@ joystick.init()
 
 print("✅ Mando conectado:", joystick.get_name())
 
-def enviar_comando(c, x, y):
-    arduino.write(c.encode())
+def enviar_comando(c):
+    # arduino.write(c.encode())
     if c != 'x':
-        print(f"📤 Enviado: '{c}' | Coords: X={x:.2f} Y={y:.2f}")
+        print(f"📤 Enviado: '{c}'")
 
 while True:
     pygame.event.pump()
-
-    eje_x = joystick.get_axis(0)
-    eje_y = joystick.get_axis(1)
 
     deadzone = 0.2
     comando = 'x'  # quieto por defecto
@@ -30,19 +27,23 @@ while True:
     # Leer botones círculo y equis
     boton_circulo = joystick.get_button(1)  # botón círculo suele ser el 1
     boton_cuadrado = joystick.get_button(0)  # botón equis suele ser el 0
+    pad_up = joystick.get_button(11)
+    pad_down = joystick.get_button(12)
+    pad_left = joystick.get_button(13)
+    pad_right = joystick.get_button(14)
 
-    if eje_y < -deadzone:
+    if pad_up:
         comando = 'w'  # alante
-    elif eje_y > deadzone:
+    if pad_down:
         comando = 's'  # atrás
-    elif eje_x < -deadzone:
+    if pad_left:
         comando = 'a'  # izquierda
-    elif eje_x > deadzone:
+    if pad_right:
         comando = 'd'  # derecha
-    elif boton_circulo:
+    if boton_circulo:
         comando = 'i'  # subir con círculo
-    elif boton_cuadrado:
+    if boton_cuadrado:
         comando = 'k'  # bajar con cuadrado
 
-    enviar_comando(comando, eje_x, eje_y)
+    enviar_comando(comando)
     time.sleep(0.1)

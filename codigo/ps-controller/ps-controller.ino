@@ -47,6 +47,7 @@ void loop() {
     char comando = Serial.read();
     pararTodo();
 
+    lcd.clear();
     switch (comando) {
       case 'w': // Avanzar
         lcd.setCursor(0,0);
