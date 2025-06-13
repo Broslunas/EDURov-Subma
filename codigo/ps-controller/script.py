@@ -1,49 +1,54 @@
+from flask import Flask, render_template
+from flask_socketio import SocketIO
 import pygame
-import serial
 import time
+import threading
+import serial
 
-# arduino = serial.Serial('COM4', 9600)
-time.sleep(2)
+arduino = serial.Serial('COM3', 9600)
 
+app = Flask(__name__)
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+# pygame setup
 pygame.init()
 pygame.joystick.init()
-
 joystick = pygame.joystick.Joystick(0)
 joystick.init()
 
-print("✅ Mando conectado:", joystick.get_name())
-
 def enviar_comando(c):
-    # arduino.write(c.encode())
     if c != 'x':
         print(f"📤 Enviado: '{c}'")
+    socketio.emit('comando', {'comando': c})
+    arduino.write(c.encode())
 
-while True:
-    pygame.event.pump()
+def leer_mando():
+    while True:
+        pygame.event.pump()
+        comando = 'x'
 
-    deadzone = 0.2
-    comando = 'x'  # quieto por defecto
+        if joystick.get_button(11):
+            comando = 'w'
+        elif joystick.get_button(12):
+            comando = 's'
+        elif joystick.get_button(13):
+            comando = 'a'
+        elif joystick.get_button(14):
+            comando = 'd'
+        elif joystick.get_button(1):
+            comando = 'i'
+        elif joystick.get_button(0):
+            comando = 'k'
 
-    # Leer botones círculo y equis
-    boton_circulo = joystick.get_button(1)  # botón círculo suele ser el 1
-    boton_cuadrado = joystick.get_button(0)  # botón equis suele ser el 0
-    pad_up = joystick.get_button(11)
-    pad_down = joystick.get_button(12)
-    pad_left = joystick.get_button(13)
-    pad_right = joystick.get_button(14)
+        enviar_comando(comando)
+        time.sleep(0.1)
 
-    if pad_up:
-        comando = 'w'  # alante
-    if pad_down:
-        comando = 's'  # atrás
-    if pad_left:
-        comando = 'a'  # izquierda
-    if pad_right:
-        comando = 'd'  # derecha
-    if boton_circulo:
-        comando = 'i'  # subir con círculo
-    if boton_cuadrado:
-        comando = 'k'  # bajar con cuadrado
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-    enviar_comando(comando)
-    time.sleep(0.1)
+if __name__ == '__main__':
+    thread = threading.Thread(target=leer_mando)
+    thread.daemon = True
+    thread.start()
+    socketio.run(app, host='0.0.0.0', port=5000)

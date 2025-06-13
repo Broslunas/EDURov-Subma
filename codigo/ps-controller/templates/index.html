@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link
+      rel="shortcut icon"
+      href="https://cdn.broslunas.com/favicon.ico"
+      type="image/x-icon"
+    />
+    <title>Controller Preview</title>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <style>
+      * {
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+      }
+
+      body {
+        background-color: #000;
+        color: #00ff00;
+        font-family: "Courier New", Courier, monospace;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100dvh;
+        margin: 0;
+        touch-action: none;
+      }
+
+      h1 {
+        font-size: 2em;
+        text-shadow: 0 0 5px #00ff00;
+        margin: 10px;
+        text-align: center;
+      }
+
+      #comando {
+        font-size: 2em;
+        font-weight: bold;
+        text-shadow: 0 0 10px #00ff00;
+        animation: blink 1s step-start infinite;
+        margin-bottom: 20px;
+      }
+
+      @keyframes blink {
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      .container {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      canvas {
+        background: #111;
+        border: 2px solid #00ff00;
+        box-shadow: 0 0 10px #00ff00;
+        display: block;
+      }
+
+      .flechas {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        justify-content: center;
+        user-select: none;
+      }
+
+      .flecha {
+        font-size: 3em;
+        color: #004400;
+        transition: color 0.3s ease;
+        user-select: none;
+        text-align: center;
+      }
+
+      .flecha.activa {
+        color: #00ff00;
+        text-shadow: 0 0 8px #00ff00;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="comando">Esperando...</div>
+
+    <div class="container">
+      <canvas id="render" width="300" height="300"></canvas>
+
+      <div class="flechas">
+        <div id="flecha-arriba" class="flecha">⬆️</div>
+        <div id="flecha-abajo" class="flecha">⬇️</div>
+      </div>
+    </div>
+
+    <script>
+      const socket = io();
+      const comandoEl = document.getElementById("comando");
+      const flechaArriba = document.getElementById("flecha-arriba");
+      const flechaAbajo = document.getElementById("flecha-abajo");
+
+      const mapa = {
+        w: "Avanzando",
+        s: "Retrocediendo",
+        a: "Izquierda",
+        d: "Derecha",
+        i: "Subiendo",
+        k: "Bajando",
+        x: "🛑",
+      };
+
+      let comando = "x";
+
+      socket.on("comando", (data) => {
+        comando = data.comando;
+        comandoEl.textContent = mapa[comando] || "Desconocido 🤔";
+
+        // Flechas solo para i y k
+        if (comando === "i") {
+          flechaArriba.classList.add("activa");
+        } else {
+          flechaArriba.classList.remove("activa");
+        }
+
+        if (comando === "k") {
+          flechaAbajo.classList.add("activa");
+        } else {
+          flechaAbajo.classList.remove("activa");
+        }
+      });
+
+      // Render solo para w, a, s, d
+      const canvas = document.getElementById("render");
+      const ctx = canvas.getContext("2d");
+
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      let x = centerX;
+      let y = centerY;
+      const size = 20;
+      const speed = 2;
+
+      function lerp(start, end, t) {
+        return start + (end - start) * t;
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        let dx = 0,
+          dy = 0;
+        if (["w", "a", "s", "d"].includes(comando)) {
+          switch (comando) {
+            case "w":
+              dy = -speed;
+              break;
+            case "s":
+              dy = speed;
+              break;
+            case "a":
+              dx = -speed;
+              break;
+            case "d":
+              dx = speed;
+              break;
+          }
+          x += dx;
+          y += dy;
+        } else {
+          // volver suavemente al centro cuando no es w,a,s,d
+          x = lerp(x, centerX, 0.1);
+          y = lerp(y, centerY, 0.1);
+        }
+
+        // límites para que no se salga
+        x = Math.min(Math.max(size / 2, x), canvas.width - size / 2);
+        y = Math.min(Math.max(size / 2, y), canvas.height - size / 2);
+
+        // dibujar círculo
+        ctx.fillStyle = "#00ff00";
+        ctx.beginPath();
+        ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        requestAnimationFrame(draw);
+      }
+
+      draw();
+    </script>
+  </body>
+</html>
