@@ -78,29 +78,29 @@ void loop() {
   if (x1 > JOYSTICK_CENTRO + RADIO_DEADZONE)  
   {
     lcd.print("Atras");
-
-    // MOTOR A
-    digitalWrite(IN1, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    digitalWrite(IN2, LOW);  // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    analogWrite(ENA1, 200);
-
-    // MOTOR B
-    digitalWrite(IN3, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    digitalWrite(IN4, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    analogWrite(ENB, 200);
-  }
-  else if (x1 < JOYSTICK_CENTRO - RADIO_DEADZONE)
-  {
-    lcd.print("Alante");
     
     // MOTOR A
-    digitalWrite(IN1, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    digitalWrite(IN2, HIGH);// MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN1, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN2, LOW);// MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     analogWrite(ENA1, 200);
 
     // MOTOR B
     digitalWrite(IN3, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     digitalWrite(IN4, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    analogWrite(ENB, 200);
+  }
+  else if (x1 < JOYSTICK_CENTRO - RADIO_DEADZONE)
+  {
+    lcd.print("Alante");
+
+    // MOTOR A
+    digitalWrite(IN1, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN2, HIGH);  // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    analogWrite(ENA1, 200);
+
+    // MOTOR B
+    digitalWrite(IN3, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN4, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     analogWrite(ENB, 200);
   }
   else if (y1 > JOYSTICK_CENTRO + RADIO_DEADZONE)
@@ -113,22 +113,22 @@ void loop() {
     analogWrite(ENA1, 200);
 
     // MOTOR B
-    digitalWrite(IN3, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    digitalWrite(IN4, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN3, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN4, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     analogWrite(ENB, 200);
   }
   else if (y1 < JOYSTICK_CENTRO - RADIO_DEADZONE)
-  {
+   {
     lcd.print("Derecha");
-    
+
     // MOTOR A
     digitalWrite(IN1, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     digitalWrite(IN2, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     analogWrite(ENA1, 200);
 
     // MOTOR B
-    digitalWrite(IN3, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
-    digitalWrite(IN4, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN3, LOW); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
+    digitalWrite(IN4, HIGH); // MODIFICAR SEGUN ORIENTACIÓN DE LAS ASPAS
     analogWrite(ENB, 200);
   }
   else
